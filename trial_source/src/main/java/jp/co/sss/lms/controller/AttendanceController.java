@@ -1,6 +1,8 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +44,46 @@ public class AttendanceController {
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model) {
 
-		// 勤怠一覧の取得
-		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+	    // 勤怠一覧の取得
+	    List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+	            .getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 
-		return "attendance/detail";
+	    // 過去日の勤怠未入力チェック
+	    boolean hasPastUnenteredAttendance = false;
+
+	    LocalDate today = LocalDate.now();
+
+	    for (AttendanceManagementDto dto : attendanceManagementDtoList) {
+
+	        if (dto.getTrainingDate() != null) {
+
+	            LocalDate trainingDate = dto.getTrainingDate()
+	                    .toInstant()
+	                    .atZone(ZoneId.systemDefault())
+	                    .toLocalDate();
+
+	            // 過去日の場合
+	            if (trainingDate.isBefore(today)) {
+
+	                // 出勤時間または退勤時間が未入力の場合
+	                if (dto.getTrainingStartTime() == null
+	                        || dto.getTrainingStartTime().isEmpty()
+	                        || dto.getTrainingEndTime() == null
+	                        || dto.getTrainingEndTime().isEmpty()) {
+
+	                    hasPastUnenteredAttendance = true;
+	                    break;
+	                }
+	            }
+	        }
+	    }
+
+	    model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+
+	    // 過去日の未入力有無を画面に渡す
+	    model.addAttribute("hasPastUnenteredAttendance", hasPastUnenteredAttendance);
+
+	    return "attendance/detail";
 	}
 
 	/**
