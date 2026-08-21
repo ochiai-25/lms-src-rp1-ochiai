@@ -1,8 +1,7 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,41 +47,16 @@ public class AttendanceController {
 	    List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 	            .getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 
-	    // 過去日の勤怠未入力チェック
-	    boolean hasPastUnenteredAttendance = false;
+	 // 過去日の勤怠未入力件数取得
+		Date today = new Date();
+		Integer pastUnenteredAttendanceCount = studentAttendanceService
+				.countPastUnenteredAttendance(loginUserDto.getLmsUserId(), today);
 
-	    LocalDate today = LocalDate.now();
-
-	    for (AttendanceManagementDto dto : attendanceManagementDtoList) {
-
-	        if (dto.getTrainingDate() != null) {
-
-	            LocalDate trainingDate = dto.getTrainingDate()
-	                    .toInstant()
-	                    .atZone(ZoneId.systemDefault())
-	                    .toLocalDate();
-
-	            // 過去日の場合
-	            if (trainingDate.isBefore(today)) {
-
-	                // 出勤時間または退勤時間が未入力の場合
-	                if (dto.getTrainingStartTime() == null
-	                        || dto.getTrainingStartTime().isEmpty()
-	                        || dto.getTrainingEndTime() == null
-	                        || dto.getTrainingEndTime().isEmpty()) {
-
-	                    hasPastUnenteredAttendance = true;
-	                    break;
-	                }
-	            }
-	        }
-	    }
-
+		// 過去日の未入力有無を画面に渡す
+		boolean hasPastUnenteredAttendance = pastUnenteredAttendanceCount > 0;
+	    
 	    model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
-
-	    // 過去日の未入力有無を画面に渡す
 	    model.addAttribute("hasPastUnenteredAttendance", hasPastUnenteredAttendance);
-
 	    return "attendance/detail";
 	}
 

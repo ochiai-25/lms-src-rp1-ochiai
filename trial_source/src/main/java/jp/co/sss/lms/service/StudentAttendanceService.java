@@ -74,6 +74,20 @@ public class StudentAttendanceService {
 	}
 
 	/**
+	 * 過去日の勤怠未入力件数取得
+	 *
+	 * @param lmsUserId
+	 * @param trainingDate
+	 * @return 過去日の勤怠未入力件数
+	 */
+	public Integer countPastUnenteredAttendance(Integer lmsUserId, Date trainingDate) {
+
+		return tStudentAttendanceMapper.countPastUnenteredAttendance(
+				lmsUserId,
+				Constants.DB_FLG_FALSE,
+				trainingDate);
+	}
+	/**
 	 * 出退勤更新前のチェック
 	 * 
 	 * @param attendanceType
