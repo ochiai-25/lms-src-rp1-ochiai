@@ -56,6 +56,8 @@ public class AttendanceController {
 		boolean hasPastUnenteredAttendance = pastUnenteredAttendanceCount > 0;
 	    
 	    model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+	    
+	    //Controllerで判定した結果を、Thymeleafの画面側で使用可能
 	    model.addAttribute("hasPastUnenteredAttendance", hasPastUnenteredAttendance);
 	    return "attendance/detail";
 	}

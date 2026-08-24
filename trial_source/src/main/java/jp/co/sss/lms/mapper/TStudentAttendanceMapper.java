@@ -44,9 +44,9 @@ public interface TStudentAttendanceMapper {
 	 * @return 過去日の勤怠未入力件数
 	 */
 	Integer countPastUnenteredAttendance(
-			@Param("lmsUserId") Integer lmsUserId,
-			@Param("deleteFlg") Short deleteFlg,
-			@Param("trainingDate") Date trainingDate);
+			@Param("lmsUserId") Integer lmsUserId,   /**誰の勤怠なのか*/
+			@Param("deleteFlg") Short deleteFlg,	/**削除されているデータを除外*/
+			@Param("trainingDate") Date trainingDate);  /**どの日付を基準にして過去日を判定するか指定＊/
 
 	/**
 	 * 勤怠情報（受講生入力）登録
