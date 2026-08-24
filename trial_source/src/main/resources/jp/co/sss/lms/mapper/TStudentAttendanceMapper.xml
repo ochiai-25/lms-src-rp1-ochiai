@@ -41,12 +41,14 @@
 	</select>
 
 	<select id="countPastUnenteredAttendance" resultType="java.lang.Integer">
-    SELECT COUNT(*)   <!-- 条件に該当する勤怠データが何件あるか -->
-    FROM t_student_attendance    <!-- 勤怠情報が登録されているテーブルを検索 -->
-    WHERE lms_user_id = #{lmsUserId}    <!-- ログインしている受講生本人の勤怠だけを検索 -->
-        AND delete_flg = #{deleteFlg}
-        AND training_date &lt; #{trainingDate}
-        AND status != 1
+    SELECT COUNT(*)  <!-- 落合晴香 Task25 --> <!-- 条件に該当する勤怠データが何件あるか -->
+    FROM t_student_attendance    <!-- 落合晴香 Task25 --> <!-- 勤怠情報が登録されているテーブルを検索 -->
+    WHERE lms_user_id = #{lmsUserId}  <!-- 落合晴香 Task25 -->   <!-- ログインしている受講生本人の勤怠だけを検索 -->
+        AND delete_flg = #{deleteFlg} <!-- 落合晴香 Task25 -->
+        AND training_date &lt; #{trainingDate} <!-- 落合晴香 Task25 -->
+        AND status != 1 <!-- 落合晴香 Task25 -->
+        
+         <!-- 落合晴香 Task25 -->
         AND (
             training_start_time = ''
             OR training_end_time = ''
