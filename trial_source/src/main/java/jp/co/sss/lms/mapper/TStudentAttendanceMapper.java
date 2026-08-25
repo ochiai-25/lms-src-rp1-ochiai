@@ -18,19 +18,19 @@ import jp.co.sss.lms.entity.TStudentAttendance;
 public interface TStudentAttendanceMapper {
 
 	/**
-	 * 勤怠情報（受講生入力）取得（LMSユーザーID）
+	 * 勤怠情報（受講生入力）取得（LMSユーザーID） 東京ITスクール
 	 */
 	List<TStudentAttendance> findByLmsUserId(@Param("lmsUserId") Integer lmsUserId,
 			@Param("deleteFlg") Short deleteFlg);
 
 	/**
-	 * 勤怠情報（受講生入力）取得（LMSユーザーID＆日付）
+	 * 勤怠情報（受講生入力）取得（LMSユーザーID＆日付）　東京ITスクール
 	 */
 	TStudentAttendance findByLmsUserIdAndTrainingDate(@Param("lmsUserId") Integer lmsUserId,
 			@Param("trainingDate") Date trainingDate, @Param("deleteFlg") Short deleteFlg);
 
 	/**
-	 * 勤怠管理画面用DTOリスト取得
+	 * 勤怠管理画面用DTOリスト取得　東京スクール
 	 */
 	List<AttendanceManagementDto> getAttendanceManagement(@Param("courseId") Integer courseId,
 			@Param("lmsUserId") Integer lmsUserId, @Param("deleteFlg") Short deleteFlg);
@@ -38,23 +38,26 @@ public interface TStudentAttendanceMapper {
 	/**
 	 * 過去日の勤怠未入力件数取得
 	 *
-	 * @param lmsUserId
-	 * @param deleteFlg
-	 * @param trainingDate
-	 * @return 過去日の勤怠未入力件数
+	 * @param lmsUserId  落合晴香 - Task.25
+	 * @param deleteFlg  落合晴香 - Task.25
+	 * @param trainingDate  落合晴香 - Task.25
+	 * @return 過去日の勤怠未入力件数  落合晴香 - Task.25
 	 */
 	Integer countPastUnenteredAttendance(
-			@Param("lmsUserId") Integer lmsUserId,   /** 落合晴香 Task25 */
-			@Param("deleteFlg") Short deleteFlg,	/**落合晴香 Task25 */   /**削除されているデータを除外*/
-			@Param("trainingDate") Date trainingDate); /**落合晴香 Task25 */ /**どの日付を基準にして過去日を判定するか指定＊/
+			@Param("lmsUserId") Integer lmsUserId, /** 落合晴香 Task25 */
+			@Param("deleteFlg") Short deleteFlg, /**落合晴香 Task25 */ /**削除されているデータを除外*/
+			@Param("trainingDate") Date trainingDate);
 
+	/**落合晴香 Task25 */
+	/**どの日付を基準にして過去日を判定するか指定＊/
+	
 	/**
-	 * 勤怠情報（受講生入力）登録
-	 */
+	* 勤怠情報（受講生入力）登録　　東京ITスクール
+	*/
 	Boolean insert(TStudentAttendance tStudentAttendance);
 
 	/**
-	 * 勤怠情報（受講生入力）更新
+	 * 勤怠情報（受講生入力）更新　　東京ITスクール
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
 

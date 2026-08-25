@@ -76,17 +76,16 @@ public class StudentAttendanceService {
 	/**
 	 * 過去日の勤怠未入力件数取得
 	 *
-	 * @param lmsUserId
-	 * @param trainingDate
-	 * @return 過去日の勤怠未入力件数
+	 * @param lmsUserId　落合晴香 - Task25
+	 * @param trainingDate  落合晴香 - Task25
+	 * @return 過去日の勤怠未入力件数  落合晴香 - Task25
 	 */
 	public Integer countPastUnenteredAttendance(Integer lmsUserId, Date trainingDate) {
 
-		return tStudentAttendanceMapper.countPastUnenteredAttendance(
-				lmsUserId,
-				Constants.DB_FLG_FALSE,
-				trainingDate);
+		return tStudentAttendanceMapper.countPastUnenteredAttendance(lmsUserId, Constants.DB_FLG_FALSE,
+				trainingDate); /**削除されていないデータを検索*/ /**落合晴香 - Task25 */
 	}
+
 	/**
 	 * 出退勤更新前のチェック
 	 * 
@@ -107,6 +106,7 @@ public class StudentAttendanceService {
 		TStudentAttendance tStudentAttendance = tStudentAttendanceMapper
 				.findByLmsUserIdAndTrainingDate(loginUserDto.getLmsUserId(), trainingDate,
 						Constants.DB_FLG_FALSE);
+
 		switch (attendanceType) {
 		case Constants.CODE_VAL_ATWORK:
 			if (tStudentAttendance != null
@@ -233,6 +233,10 @@ public class StudentAttendanceService {
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+		attendanceForm.setTrainingStartTimeHour(attendanceUtil.gethour());
+		attendanceForm.setTrainingStartTimeMinute(attendanceUtil.getminitu());
+		attendanceForm.setTrainingEndTimeHour(attendanceUtil.gethour());
+		attendanceForm.setTrainingEndTimeMinute(attendanceUtil.getminitu());
 
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
@@ -249,9 +253,42 @@ public class StudentAttendanceService {
 					.setStudentAttendanceId(attendanceManagementDto.getStudentAttendanceId());
 			dailyAttendanceForm
 					.setTrainingDate(dateUtil.toString(attendanceManagementDto.getTrainingDate()));
-			dailyAttendanceForm
-					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
-			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+			//			dailyAttendanceForm
+			//					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
+			//			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+
+			// 出勤 - 時と分を抜き出す
+			String hour = "";
+			String minute = "";
+			if (attendanceManagementDto.getTrainingStartTime() == null ||
+					attendanceManagementDto.getTrainingStartTime().isEmpty()) {
+				dailyAttendanceForm.setTrainingStartTimeHour(null);
+				dailyAttendanceForm.setTrainingStartTimeMinute(null);
+			} else {
+				hour = attendanceUtil.getTimeHour(attendanceManagementDto.getTrainingStartTime());
+				minute = attendanceUtil.getTimeMinute(attendanceManagementDto.getTrainingStartTime());
+				dailyAttendanceForm.setTrainingStartTimeHour(Integer.parseInt(hour));
+				dailyAttendanceForm.setTrainingStartTimeMinute(Integer.parseInt(minute));
+				System.out.println("出勤：DtogetTrainingStartTime" + attendanceManagementDto.getTrainingStartTime()
+						+ "hour" + Integer.parseInt(hour) + "minute" + Integer.parseInt(minute));
+			}
+			// リセット
+			hour = "";
+			minute = "";
+
+			// 退勤 - 時と分を抜き出す
+			if (attendanceManagementDto.getTrainingEndTime() == null ||
+					attendanceManagementDto.getTrainingEndTime().isEmpty()) {
+				dailyAttendanceForm.setTrainingEndTimeHour(null);
+				dailyAttendanceForm.setTrainingEndTimeMinute(null);
+			} else {
+				hour = attendanceUtil.getTimeHour(attendanceManagementDto.getTrainingEndTime());
+				minute = attendanceUtil.getTimeMinute(attendanceManagementDto.getTrainingEndTime());
+				dailyAttendanceForm.setTrainingEndTimeHour(Integer.parseInt(hour));
+				dailyAttendanceForm.setTrainingEndTimeMinute(Integer.parseInt(minute));
+				//						System.out.println("退勤：DtogetTrainingEndTime" + attendanceManagementDto.getTrainingEndTime() + "hour"+ Integer.parseInt(hour) + "minute" + Integer.parseInt(minute));
+			}
+
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(

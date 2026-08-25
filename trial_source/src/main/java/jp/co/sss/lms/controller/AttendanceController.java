@@ -34,39 +34,38 @@ public class AttendanceController {
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
-	 * @param lmsUserId
-	 * @param courseId
-	 * @param model
+	 * @param lmsUserId lmsUserIDクラス
+	 * @param courseId courseIdクラス
+	 * @param model modelクラス
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
 	public String index(Model model) {
 
-	    
 		//落合晴香 Task25    // 勤怠一覧の取得
-	    List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-	            .getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 
-	 //落合晴香 Task25  // 過去日の勤怠未入力件数取得
+		//落合晴香 Task25  // 過去日の勤怠未入力件数取得
 		Date today = new Date();
 		Integer pastUnenteredAttendanceCount = studentAttendanceService
 				.countPastUnenteredAttendance(loginUserDto.getLmsUserId(), today);
 
 		//落合晴香 Task25  // 過去日の未入力有無を画面に渡す
 		boolean hasPastUnenteredAttendance = pastUnenteredAttendanceCount > 0;
-	    
-	    model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
-	    
-	    //落合晴香 Task25 //Controllerで判定した結果を、Thymeleafの画面側で使用可能
-	    model.addAttribute("hasPastUnenteredAttendance", hasPastUnenteredAttendance);
-	    return "attendance/detail";
+
+		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+
+		//落合晴香 Task25 //Controllerで判定した結果を、Thymeleafの画面側で使用可能
+		model.addAttribute("hasPastUnenteredAttendance", hasPastUnenteredAttendance);
+		return "attendance/detail";
 	}
 
 	/**
 	 * 勤怠管理画面 『出勤』ボタン押下
 	 * 
-	 * @param model
+	 * @param model modelクラス
 	 * @return 勤怠管理画面
 	 */
 	@RequestMapping(path = "/detail", params = "punchIn", method = RequestMethod.POST)
@@ -91,7 +90,7 @@ public class AttendanceController {
 	/**
 	 * 勤怠管理画面 『退勤』ボタン押下
 	 * 
-	 * @param model
+	 * @param model　modelクラス
 	 * @return 勤怠管理画面
 	 */
 	@RequestMapping(path = "/detail", params = "punchOut", method = RequestMethod.POST)
@@ -116,10 +115,10 @@ public class AttendanceController {
 	/**
 	 * 勤怠管理画面 『勤怠情報を直接編集する』リンク押下
 	 * 
-	 * @param model
+	 * @param model モデルクラス
 	 * @return 勤怠情報直接変更画面
 	 */
-	
+
 	@RequestMapping(path = "/update")
 	public String update(Model model) {
 
@@ -143,7 +142,7 @@ public class AttendanceController {
 	 * @return 勤怠管理画面
 	 * @throws ParseException
 	 */
-	
+
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
