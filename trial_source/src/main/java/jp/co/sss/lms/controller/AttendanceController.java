@@ -1,7 +1,6 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,23 +40,17 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(Model model)  throws ParseException {
 
-		//落合晴香 Task25    // 勤怠一覧の取得
-		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 
-		//落合晴香 Task25  // 過去日の勤怠未入力件数取得
-		Date today = new Date();
-		Integer pastUnenteredAttendanceCount = studentAttendanceService
-				.countPastUnenteredAttendance(loginUserDto.getLmsUserId(), today);
+		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 
 		//落合晴香 Task25  // 過去日の未入力有無を画面に渡す
-		boolean hasPastUnenteredAttendance = pastUnenteredAttendanceCount > 0;
+		boolean hasPastUnenteredAttendance = studentAttendanceService.notEnterCheck();
 
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		//落合晴香 Task25 //Controllerで判定した結果を、Thymeleafの画面側で使用可能
+		// 過去日の未入力有無を画面に渡す
 		model.addAttribute("hasPastUnenteredAttendance", hasPastUnenteredAttendance);
 		return "attendance/detail";
 	}

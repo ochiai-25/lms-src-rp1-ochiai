@@ -37,20 +37,17 @@ public interface TStudentAttendanceMapper {
 
 	/**
 	 * 過去日の勤怠未入力件数取得
-	 *
-	 * @param lmsUserId  落合晴香 - Task.25
-	 * @param deleteFlg  落合晴香 - Task.25
-	 * @param trainingDate  落合晴香 - Task.25
-	 * @return 過去日の勤怠未入力件数  落合晴香 - Task.25
+	 *@author h-ochiai
+	 * @param lmsUserId
+	 * @param deleteFlg
+	 * @param trainingDate
+	 * @return 過去日の勤怠未入力件数
 	 */
-	Integer countPastUnenteredAttendance(
-			@Param("lmsUserId") Integer lmsUserId, /** 落合晴香 Task25 */
-			@Param("deleteFlg") Short deleteFlg, /**落合晴香 Task25 */ /**削除されているデータを除外*/
+	Integer notEnterCount(
+			@Param("lmsUserId") Integer lmsUserId,
+			@Param("deleteFlg") Short deleteFlg,
 			@Param("trainingDate") Date trainingDate);
 
-	/**落合晴香 Task25 */
-	/**どの日付を基準にして過去日を判定するか指定＊/
-	
 	/**
 	* 勤怠情報（受講生入力）登録　　東京ITスクール
 	*/
